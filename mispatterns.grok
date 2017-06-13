@@ -1,0 +1,25 @@
+NGUSERNAME [a-zA-Z\.\@\-\+_%]+
+NGUSER %{NGUSERNAME}
+NGINXACCESS %{IPORHOST:ipclient} %{NGUSER:ident} %{NGUSER:auth} \[%{HTTPDATE:timestamp}\] "%{WORD:verb} %{URIPATHPARAM:request} HTTP/%{NUMBER:httpversion}" %{NUMBER:response} (?:%{NUMBER:bytes}|-) (?:"(?:%{URI:referrer}|-)"|%{QS:referrer}) %{QS:agent}
+
+TIMEVISION ([ (]?%{MONTHDAY:days}d)?([ (]?%{HOUR:hours}h)?([ (]?%{BASE10NUM:mins}m)?[ (]?%{BASE10NUM:secs}s[)]
+
+RTMPLOG %{IPORHOST:ipclient} \[%{HTTPDATE:timestamp}\] %{WORD:command} "%{WORD:app}" "(%{WORD:name})?" %{DATA} %{NUMBER:bytesreceived} %{NUMBER:bytessent} "%{URI:url}" "%{HOSTNAME:flashhost} %{GREEDYDATA:flashversion}" %{TIMEVISION:timevision}
+
+RTMPLOGV2 %{IPORHOST:ipclient} \[%{HTTPDATE:timestamp}\] %{WORD:command} "%{GREEDYDATA:app}" "%{WORD:name}" %{DATA} %{NUMBER:bytesreceived} %{NUMBER:bytessent} "%{URI:url}" "%{HOSTNAME:flashhost} %{GREEDYDATA:flashversion}" %{TIMEVISION:timevision}
+
+ADOBELOG %{TYPEOFEVENT:clientstate}\t%{WORD:category}\t%{YEAR:year}-%{MONTHNUM:month}-%{MONTHDAY:day}\t%{TIME:time}\t%{WORD:timezone}(\t%{IP})?(\t%{PROG:recurso})?\t%{IP:ipHost}\t%{NUMBER:spid}\t%{NUMBER:cpuload}\t%{NUMBER:memoryusage}\t%{WORD}\t%{WORD}\t%{WORD:app}\t%{WORD:appinstance}\t%{NUMBER:eventduration}\t%{ADOBEINPUT}\t%{IP:ipclient}\t%{CPROTO}\t%{ADOBEINPUT}\t%{URI}\t%{URI}\t%{ADOBEINPUT}\t%{URI:referrer}\t%{USERAGENT:useragent}\t%{NUMBER}\t%{NUMBER}\t%{NUMBER:scBytes}
+
+TYPEOFEVENT %{WORD:status}[-]?(%{WORD:stream})?
+USERAGENT %{WORD:os} %{NUMBER},%{NUMBER},%{NUMBER},%{NUMBER}
+ADOBEINPUT [-]?(%{WORD})?(%{NUMBER})?
+CPROTO %{WORD}([(]%{WORD}[-]%{BASE16FLOAT}[)])?
+TIMEONLINE %{HOUR:hora}:%{MINUTE:minutes[Mbs]}:%{SECOND:segundos}
+
+YMDDATE %{YEAR}-%{MONTHNUM}-%{MONTHDAY}
+WOWZENTRY [^\t]+
+WOWZIP (?:%{IP}|-)
+WOWZNONNEGINT (?:%{NONNEGINT}|-)
+WOWZNUMBER (?:%{NUMBER}|-)
+WOWZPATH (?:%{PATH}|-)
+WOWZAACCESSLOG %{YMDDATE:date}\t%{TIME:time}\t%{WORD}\t%{WOWZENTRY:xEvent}\t%{WORD:xCategory}\t%{LOGLEVEL:xSeverity}\t%{WOWZNONNEGINT:xStatus}\t%{WOWZENTRY:xCtx}\t%{WOWZENTRY:xComment}(?<xcommentmalformed>\t.*)?\t%{WOWZENTRY:xVhost}\t%{WOWZENTRY:xApp}\t%{WOWZENTRY:xAppinst}\t%{NUMBER:xDuration}\t%{WOWZENTRY:sIp}\t%{WOWZNONNEGINT:sPort}\t%{WOWZENTRY:sUri}\t%{WOWZIP:cIp}\t%{WOWZENTRY:cProto}\t%{WOWZENTRY:cReferrer}\t%{WOWZENTRY:cUserAgent}\t%{WOWZENTRY:cClientId}\t%{WOWZNONNEGINT:csBytes}\t%{WOWZNONNEGINT:scBytes}\t%{WOWZENTRY:xStreamId}\t%{WOWZNONNEGINT:xSpos}\t%{WOWZNONNEGINT:csStreamBytes}\t%{WOWZNONNEGINT:scStreamBytes}\t%{WOWZENTRY:xSname}\t%{WOWZENTRY:xSnameQuery}\t%{WOWZPATH:xFileName}\t%{WOWZENTRY:xFileExt}\t%{WOWZNONNEGINT:xFileSize}\t%{WOWZNUMBER:xFileLength}\t%{WOWZENTRY:xSuri}\t%{WOWZENTRY:xSuriStem}\t%{WOWZENTRY:xSuriQuery}\t%{WOWZENTRY:csUriStem}\t%{WOWZENTRY:csUriQuery}
